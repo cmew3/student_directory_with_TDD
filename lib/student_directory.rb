@@ -118,8 +118,7 @@ def print_header
 end
 
 def print_footer(students)
-	show "There are 3 students in the directory"
-
+	show "There are #{students.length} students in the directory"
 end
 
 
