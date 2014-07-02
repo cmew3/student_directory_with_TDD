@@ -139,19 +139,13 @@ describe 'Student directory' do
 			print_header
 		end
 
-		it 'prints a footer' do
+		it 'prints a footer with 3 students' do
 			students = [anna,edward,sarah]
 			expect(self).to receive(:show).with("There are 3 students in the directory")
 			print_footer(students)
 		end
 
-		it 'prints a footer' do
-			students = [anna,edward]
-			expect(self).to receive(:show).with("There are 2 students in the directory")
-			print_footer(students)
-		end
-
-		it 'prints a footer' do
+		it 'prints a footer with 1 student' do
 			students = [anna]
 			expect(self).to receive(:show).with("There is 1 student in the directory")
 			print_footer(students)
@@ -192,6 +186,35 @@ describe 'Student directory' do
 			students = [edward,anna,sarah]	
 			expect_to_display(students)
 			print_students_by_month students
+		end
+	end
+
+	context 'it save students to a file' do
+
+		it 'prepares students into CSV format' do
+			student = anna
+			expect(student_to_csv(student)).to eq ['anna', 'June']
+
+		end
+
+		it 'saves the student list into a CSV file' do
+			students = [edward]
+			csv = double #this is a dummy file
+			
+			expect(csv).to receive(:<<).with(["Edward","November"])
+			expect(CSV).to receive(:open).with('./student.csv','wb').and_yield(csv)
+			save_students_to_file(students)
+		end
+		
+		it 'saves many students list into a CSV file' do
+			students = [edward,anna]
+			csv = double #this is a dummy file
+			
+			expect(csv).to receive(:<<).with(["Edward","November"])
+			expect(csv).to receive(:<<).with(["anna","June"])
+			expect(CSV).to receive(:open).with('./student.csv','wb').and_yield(csv)
+			save_students_to_file(students)
+		
 		end
 	end
 

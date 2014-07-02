@@ -112,13 +112,28 @@ def print_header
 	puts ""
 end
 
-def print_footer(dummy)
-	show "There are #{dummy.length} students in the directory"
-	"Nonsense"
+def print_footer(students)
+	if students.length == 1
+		show "There is #{students.length} student in the directory"
+	else
+		show "There are #{students.length} students in the directory"
+	end
 end
 
+def student_to_csv (student)
+	[student[:name],student[:cohort].to_s]
+end
 
+require 'csv'
 
+def save_students_to_file(students)
+	CSV.open("./student.csv", "wb") do |csv|
+		students.each do |student|
+			csv << student_to_csv(student)
+		end
+	end
+end
+	
 
 
 
