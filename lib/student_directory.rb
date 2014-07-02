@@ -133,7 +133,20 @@ def save_students_to_file(students)
 		end
 	end
 end
+
+def load_students_from_csv
+	CSV.foreach("./student.csv") do |row|
+	  new_student = create_student(row[0],row[1])
+	  add_student_to_list(new_student)
+	end
+end
+
 	
+# input_students
+# load_students_from_csv
+# print_students_by_month(students)
+# save_students_to_file(students)
+
 
 
 

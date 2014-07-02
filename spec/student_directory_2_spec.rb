@@ -189,7 +189,7 @@ describe 'Student directory' do
 		end
 	end
 
-	context 'it save students to a file' do
+	context 'when saving students to a file it' do
 
 		it 'prepares students into CSV format' do
 			student = anna
@@ -197,7 +197,7 @@ describe 'Student directory' do
 
 		end
 
-		it 'saves the student list into a CSV file' do
+		it 'saves one student into a CSV file' do
 			students = [edward]
 			csv = double #this is a dummy file
 			
@@ -214,8 +214,25 @@ describe 'Student directory' do
 			expect(csv).to receive(:<<).with(["anna","June"])
 			expect(CSV).to receive(:open).with('./student.csv','wb').and_yield(csv)
 			save_students_to_file(students)
-		
 		end
+	end
+
+	context 'when loading students from a file' do
+
+		it 'adds the students from a csv file to student list' do
+			students=[anna]
+			csv = ['anna', 'June']
+			expect(self).to receive(:create_student).with("anna","June")
+			expect(CSV).to receive(:foreach).with("./student.csv").and_yield(csv)
+			load_students_from_csv
+			expect(students).to eq [{name: 'anna', cohort: :June}]
+		end
+
+		# xit 'same test with real file' do
+		# 	load_students_from_csv('./test.csv')
+		# 	expect(students).to eq [{},{}]
+		# end
+
 	end
 
  end
