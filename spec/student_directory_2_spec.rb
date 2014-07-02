@@ -151,6 +151,11 @@ describe 'Student directory' do
 			print_footer(students)
 		end
 
+		it 'prints a footer' do
+			students = [anna,edward]
+			expect(self).to receive(:show).with("There are 2 students in the directory")
+			print_footer(students)
+		end
 	end
 
 	context 'when listing students by cohort month' do
