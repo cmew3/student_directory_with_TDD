@@ -86,19 +86,19 @@ describe 'Student directory' do
 	 	it 'does not ask for a new student when user selests "N"' do
 	 		allow(self).to receive(:take_user_input).and_return("N")
 	 		expect(self).not_to receive(:get_details_of_new_student)
-	 		add_another_student?
+	 		input_students
 	 	end
 
 	 	it 'keeps asking for new students while user enters "Y"' do
 	 		allow(self).to receive(:take_user_input).and_return("Y", "Sarah", "June", "Y", "Edward", "may", "N")
-	 		allow(add_another_student?)
+	 		allow(input_students)
 	 		expect(students.count).to eq 2
 	 	end
 
 	 	it 'counts the number of students when the array is empty and user selects "N"' do
 	 		allow(self).to receive(:take_user_input).and_return("N")
 	 		expect(self).to receive(:print_student_number).and_return("There are 0 students(s) in the directory") 
-	 		add_another_student?
+	 		input_students
 	 	end
 
 	 	it 'counts the number of students when the array is not empty when pressed "N"' do 
@@ -106,7 +106,7 @@ describe 'Student directory' do
 	     	add_student_to_list(edward)
 	     	allow(self).to receive(:take_user_input).and_return("N")
 	 		expect(self).to receive(:print_student_number).and_return("There are 2 students(s) in the directory") 
-	 		add_another_student?
+	 		input_students
 		 end
 	end
 
@@ -139,9 +139,13 @@ describe 'Student directory' do
 			expect_to_show(students)
 			print_student_list(students)
 		end
-	end
 
-	context 'when asked to sort' do
+		it 'prints a header' do
+			expect(self).to receive(:show).with("The students at Makers Academy are:\n=====================================")
+			print_header
+		end
+
+	context 'when listing students by cohort month' do
 
 		it 'lists the november students only' do
 			students = [edward,anna,sarah]
@@ -153,12 +157,28 @@ describe 'Student directory' do
 			expect(select_by_month("June",students)).to eq([anna,sarah])
 		end
 
-		xit 'prints all the june students only' do
+		it 'prints only the month headers with non zero numbers of students' do
 			students = [edward,anna,sarah]
-			Date::MONTHNAMES.compact.each do |month|
-				expect(self).to receive(:select_by_month)
-			end
+			expect(self).to receive(:print_month_header).exactly(1).times.with("June")
+			expect(self).to receive(:print_month_header).exactly(1).times.with("November")
+			expect(self).not_to receive(:print_month_header).with("March")
 			print_students_by_month(students)
+		end
+
+		def expect_to_display(students)
+			Date::MONTHNAMES.compact.each do |month|
+				selected_month_students = select_by_month(month,students)
+				if selected_month_students.length!=0
+					expect(self).to receive(:print_student).exactly(selected_month_students.length).times
+				end
+			end
+		end
+
+		it 'prints the students' do
+				students = [edward,anna,sarah]	
+				expect_to_display(students)
+				print_students_by_month students
+			end
 		end
 	end
 

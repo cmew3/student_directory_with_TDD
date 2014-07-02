@@ -32,8 +32,10 @@ end
 
 def get_input (data_type)
 	if data_type=="cohort"
-		user_input = ""
+		ask_for_data (data_type)
+		user_input = take_user_input
 		until is_cohort_valid?(user_input)
+			print "Sorry that doesn't look like a month. "
 			ask_for_data (data_type)
 			user_input = take_user_input
 		end
@@ -60,7 +62,7 @@ def print_student_number
 end
 
 
-def add_another_student?
+def input_students
 	show('Would you like to add a new student ("Y") or finish ("N")')
 	selection = take_user_input.upcase
  	process_user_choice(selection)
@@ -71,12 +73,12 @@ def process_user_choice selection
 	when "Y"
 		new_student = get_details_of_new_student
 		add_student_to_list(new_student)
-		add_another_student?
+		input_students
 	when "N"
 		print_student_number
 	else
 		puts "try again"
-		add_another_student?
+		input_students
 	end
 end
 
@@ -91,7 +93,6 @@ def print_student_list(students)
 end
 
 def select_by_month(month, students)
-	
 	students.select{|student| student[:cohort]==month.to_sym}
 end
 
@@ -99,13 +100,22 @@ def print_students_by_month students
 	Date::MONTHNAMES.compact.each do |month|
 		selected_month_students = select_by_month(month,students)
 		if selected_month_students.length!=0
-			puts month
+			print_month_header month
 			print_student_list(selected_month_students)
+			puts ""
 		end
 	end
 end
 
+def print_month_header month
+	show month
+	show "---------"
+end
 
+def print_header
+	show "The students at Makers Academy are:\n====================================="
+	puts ""
+end
 
 
 
