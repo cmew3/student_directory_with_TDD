@@ -94,17 +94,11 @@ describe 'Student directory' do
 	 		expect(students.count).to eq 2
 	 	end
 
-	 	it 'counts the number of students when the array is empty and user selects "N"' do
-	 		allow(self).to receive(:take_user_input).and_return("N")
-	 		expect(self).to receive(:print_student_number).and_return("There are 0 students(s) in the directory") 
-	 		input_students
-	 	end
-
 	 	it 'counts the number of students when the array is not empty when pressed "N"' do 
 	     	add_student_to_list(sarah)
 	     	add_student_to_list(edward)
 	     	allow(self).to receive(:take_user_input).and_return("N")
-	 		expect(self).to receive(:print_student_number).and_return("There are 2 students(s) in the directory") 
+	 		expect(self).to receive(:print_footer)
 	 		input_students
 		end
 	end
@@ -156,6 +150,13 @@ describe 'Student directory' do
 			expect(self).to receive(:show).with("There are 2 students in the directory")
 			print_footer(students)
 		end
+
+		it 'prints a footer' do
+			students = [anna]
+			expect(self).to receive(:show).with("There is 1 student in the directory")
+			print_footer(students)
+		end
+
 	end
 
 	context 'when listing students by cohort month' do

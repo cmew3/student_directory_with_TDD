@@ -57,11 +57,6 @@ def get_inputs(input_list)
 	input_list.map {|input_type| get_input(input_type)}
 end
 
-def print_student_number
-	show ("There are #{students.length} student(s) in the directory")
-end
-
-
 def input_students
 	show('Would you like to add a new student ("Y") or finish ("N")')
 	selection = take_user_input.upcase
@@ -75,7 +70,7 @@ def process_user_choice selection
 		add_student_to_list(new_student)
 		input_students
 	when "N"
-		print_student_number
+		 print_footer(students)
 	else
 		puts "try again"
 		input_students
@@ -117,8 +112,9 @@ def print_header
 	puts ""
 end
 
-def print_footer(students)
-	show "There are #{students.length} students in the directory"
+def print_footer(dummy)
+	show "There are #{dummy.length} students in the directory"
+	"Nonsense"
 end
 
 
