@@ -19,29 +19,28 @@ describe 'Student directory' do
 			request_name_input = "Please enter student name."
 			expect(self).to receive(:show).with(request_name_input)
 	     	ask_for_data("student name")
-	     end
+	    end
 
-	     it 'ask the user for cohort' do 
+	    it 'ask the user for cohort' do 
 	     	request_cohort_input = "Please enter cohort."
 	     	expect(self).to receive(:show).with(request_cohort_input)
 	     	ask_for_data('cohort')
-	     end
+	    end
 
-	     context 'when inputting a cohort' do
+	    context 'when inputting a cohort' do
 
-		     it 'knows that a june cohort is valid' do
+		    it 'knows that a june cohort is valid' do
 		     	expect(is_cohort_valid?("june")).to be true
-		     end
+		    end
 
-		     it 'knows that a banana cohort is not valid' do
+		    it 'knows that a banana cohort is not valid' do
 		     	expect(is_cohort_valid?("banana")).to be false
-		     end
+		    end
 
-		     it 'only records cohort if valid' do
+		    it 'only records cohort if valid' do
 		     	allow(self).to receive(:take_user_input).and_return("banana","banana","june", "banana")
-		     	
 		     	expect(get_input("cohort")).to eq "june"
-		     end
+		    end
 
 		 end
 
@@ -49,22 +48,21 @@ describe 'Student directory' do
 	     	allow(self).to receive(:take_user_input).and_return("banana","banana","june", "banana")
 	     	allow(self).to receive(:ask_for_data)
 	     	expect((get_input("name"))).to eq("banana")
-	     end
+	    end
 
-	     it 'creates a student with name and cohort' do 
+	    it 'creates a student with name and cohort' do 
 	     	name = "Sarah"
-
 	     	cohort = :June
 	     	new_student = {:name => name, :cohort => cohort}
 	     	expect(create_student(name,cohort)).to eq new_student
-	     end
+	    end
 
-	     it 'adds the student to the list' do 
+	    it 'adds the student to the list' do 
 	     	new_student = {:name=>"Sarah", :cohort => :June}
 	     	expect(add_student_to_list(new_student)).to eq [new_student]
-	     end
+	    end
 
-	     it 'adds a second student to the list' do 
+	    it 'adds a second student to the list' do 
 	     	add_student_to_list(sarah)
 	     	expect(students).to eq [sarah]
 	     	add_student_to_list(edward)
@@ -80,6 +78,7 @@ describe 'Student directory' do
 	 		expect(self).to receive(:get_input).exactly(3).times
 	 		get_inputs(["a","b","c"])
 	 	end
+
 	 end
 
 	context 'when at the input students menu' do
@@ -107,10 +106,11 @@ describe 'Student directory' do
 	     	allow(self).to receive(:take_user_input).and_return("N")
 	 		expect(self).to receive(:print_student_number).and_return("There are 2 students(s) in the directory") 
 	 		input_students
-		 end
+		end
 	end
 
 	context 'when asked to print students' do
+
 		def expect_to_show(students)
 			students.each do |student|
 				expect(self).to receive(:show).with("#{student[:name].capitalize} is in the #{student[:cohort].capitalize} cohort")
@@ -145,6 +145,14 @@ describe 'Student directory' do
 			print_header
 		end
 
+		it 'prints a footer' do
+			students = [anna,edward,sarah]
+			expect(self).to receive(:show).with("There are 3 students in the directory")
+			print_footer(students)
+		end
+
+	end
+
 	context 'when listing students by cohort month' do
 
 		it 'lists the november students only' do
@@ -175,16 +183,10 @@ describe 'Student directory' do
 		end
 
 		it 'prints the students' do
-				students = [edward,anna,sarah]	
-				expect_to_display(students)
-				print_students_by_month students
-			end
+			students = [edward,anna,sarah]	
+			expect_to_display(students)
+			print_students_by_month students
 		end
-	end
-
-	it 'deletes a student from the list'
-		students = [sarah, anna, edward]
-		expect(delete_a_student("anna")).to eq [sarah,edward]
 	end
 
  end
