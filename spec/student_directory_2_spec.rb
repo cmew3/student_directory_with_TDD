@@ -182,6 +182,11 @@ describe 'Student directory' do
 		end
 	end
 
+	it 'deletes a student from the list'
+		students = [sarah, anna, edward]
+		expect(delete_a_student("anna")).to eq [sarah,edward]
+	end
+
  end
 
 
