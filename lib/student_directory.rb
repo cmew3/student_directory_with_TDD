@@ -117,7 +117,10 @@ def print_header
 	puts ""
 end
 
+def print_footer(students)
+	show "There are 3 students in the directory"
 
+end
 
 
 
