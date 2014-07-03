@@ -1,5 +1,9 @@
 require 'date'
 
+def students
+	@students ||= []
+end
+
 def show(string)
    puts string
 end
@@ -13,22 +17,15 @@ def ask_for_data (info_needed)
 end
 
 
-def is_cohort_valid?(string)
-	Date::MONTHNAMES.compact.include?(string.downcase.capitalize)
-end
 
-def create_student(name, cohort)
-	{name: name, cohort: cohort.downcase.capitalize.to_sym}
-end
-
-def students
-	@students ||= []
-end
 
 def add_student_to_list(new_student)
 	students << new_student
 end
 
+def is_cohort_valid?(string)
+	Date::MONTHNAMES.compact.include?(string.downcase.capitalize)
+end
 
 def get_input (data_type)
 	if data_type=="cohort"
@@ -52,28 +49,33 @@ def get_details_of_new_student
 	# puts "the students are ------ #{students}"
 end
 
+def create_student(name, cohort)
+	{name: name, cohort: cohort.downcase.capitalize.to_sym}
+end
+
 
 def get_inputs(input_list)
 	input_list.map {|input_type| get_input(input_type)}
 end
 
 def input_students
+	selection =""
 	show('Would you like to add a new student ("Y") or finish ("N")')
-	selection = take_user_input.upcase
- 	process_user_choice(selection)
+	while selection!= "N"
+		selection = take_user_input.upcase
+ 		process_add_new_student_choice(selection)
+ 	end
 end
 
-def process_user_choice selection
+def process_add_new_student_choice selection
 	case selection
 	when "Y"
 		new_student = get_details_of_new_student
 		add_student_to_list(new_student)
-		input_students
 	when "N"
 		 print_footer(students)
 	else
-		puts "try again"
-		input_students
+		puts "Not a valid input. Please try again"
 	end
 end
 
@@ -141,11 +143,33 @@ def load_students_from_csv
 	end
 end
 
-	
-# input_students
-# load_students_from_csv
-# print_students_by_month(students)
-# save_students_to_file(students)
+def print_menu_options
+	show("Please select an option:\n1. Input new students\n2. View students by cohort\n3. Save students to students.csv\n4. Load students from students.csv\n9. Exit\n")
+end
+
+def process_user_input
+	case take_user_input
+	when "1"
+		input_students
+	when "2"
+		print_students_by_month(students)
+	when "3"
+		save_students_to_file(students)
+	when "4"
+		load_students_from_csv
+	when "5"
+		exit
+	else
+		show "Sorry that is not a valid option"
+	end
+end
+
+def run_program
+	loop do
+	print_menu_options
+	process_user_input
+	end
+end
 
 
 

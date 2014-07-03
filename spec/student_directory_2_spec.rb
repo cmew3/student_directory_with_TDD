@@ -46,7 +46,6 @@ describe 'Student directory' do
 
 	    it 'does not ask for another input if name is banana' do
 	     	allow(self).to receive(:take_user_input).and_return("banana","banana","june", "banana")
-	     	allow(self).to receive(:ask_for_data)
 	     	expect((get_input("name"))).to eq("banana")
 	    end
 
@@ -78,13 +77,12 @@ describe 'Student directory' do
 	 		expect(self).to receive(:get_input).exactly(3).times
 	 		get_inputs(["a","b","c"])
 	 	end
-
 	 end
 
 	context 'when at the input students menu' do
-	 	it 'does not ask for a new student when user selests "N"' do
-	 		allow(self).to receive(:take_user_input).and_return("N")
-	 		expect(self).not_to receive(:get_details_of_new_student)
+	 	it 'keeps looping until user selects "N"' do
+	 		allow(self).to receive(:take_user_input).and_return("Y","Y","N")
+	 		expect(self).to receive(:process_add_new_student_choice).exactly(3).times
 	 		input_students
 	 	end
 
@@ -200,7 +198,6 @@ describe 'Student directory' do
 		it 'saves one student into a CSV file' do
 			students = [edward]
 			csv = double #this is a dummy file
-			
 			expect(csv).to receive(:<<).with(["Edward","November"])
 			expect(CSV).to receive(:open).with('./student.csv','wb').and_yield(csv)
 			save_students_to_file(students)
@@ -208,8 +205,7 @@ describe 'Student directory' do
 		
 		it 'saves many students list into a CSV file' do
 			students = [edward,anna]
-			csv = double #this is a dummy file
-			
+			csv = double #this is a dummy file	
 			expect(csv).to receive(:<<).with(["Edward","November"])
 			expect(csv).to receive(:<<).with(["anna","June"])
 			expect(CSV).to receive(:open).with('./student.csv','wb').and_yield(csv)
@@ -228,16 +224,43 @@ describe 'Student directory' do
 			expect(students).to eq [{name: 'anna', cohort: :June}]
 		end
 
-		# xit 'same test with real file' do
-		# 	load_students_from_csv('./test.csv')
-		# 	expect(students).to eq [{},{}]
-		# end
-
 	end
 
+	context 'when at the main menu' do
+
+		it 'welcomes the user and prints a menu' do
+			expect(self).to receive(:show).with(
+				"Please select an option:\n1. Input new students\n2. View students by cohort\n3. Save students to students.csv\n4. Load students from students.csv\n9. Exit\n")
+			print_menu_options
+		end
+
+		it 'prints the students when user selects 1' do
+			allow(self).to receive(:take_user_input).and_return("1")
+			expect(self).to receive(:input_students)
+			process_user_input
+		end
+
+		it 'does not prints the students when user selects 2' do
+			allow(self).to receive(:take_user_input).and_return("1")
+			expect(self).to receive(:input_students)
+			process_user_input
+		end
+
+		it 'exits the program when user selects 5' do
+			allow(self).to receive(:take_user_input).and_return("5")
+			expect(self).to receive(:exit)
+			process_user_input
+		end
+		
+		it 'prints a message if innput not valid' do
+			allow(self).to receive(:take_user_input).and_return("banana").exactly(1).times
+			expect(self).to receive(:show).with("Sorry that is not a valid option")
+			process_user_input
+		end
+
+	end 
+
  end
-
-
 
 
 
