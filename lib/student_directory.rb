@@ -16,9 +16,6 @@ def ask_for_data (info_needed)
 	show("Please enter #{info_needed}.")
 end
 
-
-
-
 def add_student_to_list(new_student)
 	students << new_student
 end
@@ -27,24 +24,21 @@ def is_cohort_valid?(string)
 	Date::MONTHNAMES.compact.include?(string.downcase.capitalize)
 end
 
-def get_input (data_type)
-	if data_type=="cohort"
-		ask_for_data (data_type)
-		user_input = take_user_input
+def get_single_data_input (data_field)
+	ask_for_data (data_field)
+	user_input = take_user_input
+	if data_field=="cohort"
 		until is_cohort_valid?(user_input)
 			print "Sorry that doesn't look like a month. "
-			ask_for_data (data_type)
+			ask_for_data (data_field)
 			user_input = take_user_input
 		end
-	else 
-		ask_for_data (data_type)
-		user_input = take_user_input
 	end
 	return user_input
 end
 
 def get_details_of_new_student
-	name, cohort = get_inputs(["student's name", "cohort"])
+	name, cohort = get_inputs_for(["student's name", "cohort"])
 	create_student(name, cohort)
 	# puts "the students are ------ #{students}"
 end
@@ -54,14 +48,14 @@ def create_student(name, cohort)
 end
 
 
-def get_inputs(input_list)
-	input_list.map {|input_type| get_input(input_type)}
+def get_inputs_for(data_fields)
+	data_fields.map {|input_type| get_single_data_input(input_type)}
 end
 
 def input_students
 	selection =""
 	show('Would you like to add a new student ("Y") or finish ("N")')
-	while selection!= "N"
+	until selection == "N"
 		selection = take_user_input.upcase
  		process_add_new_student_choice(selection)
  	end
@@ -75,7 +69,7 @@ def process_add_new_student_choice selection
 	when "N"
 		 print_footer(students)
 	else
-		puts "Not a valid input. Please try again"
+		show "Not a valid input. Please try again"
 	end
 end
 
