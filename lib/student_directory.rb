@@ -54,9 +54,11 @@ end
 
 def input_students
 	selection =""
-	show('Would you like to add a new student ("Y") or finish ("N")')
+	
 	until selection == "N"
-		selection = take_user_input.upcase
+		
+ 		show('Would you like to add a new student ("Y") or finish ("N")')
+ 		selection = take_user_input.upcase
  		process_add_new_student_choice(selection)
  	end
 end
@@ -138,7 +140,7 @@ def load_students_from_csv
 end
 
 def print_menu_options
-	show("Please select an option:\n1. Input new students\n2. View students by cohort\n3. Save students to students.csv\n4. Load students from students.csv\n9. Exit\n")
+	show("Please select an option:\n1. Input new students\n2. View students by cohort\n3. Save students to students.csv\n4. Load students from students.csv\n5. Exit\n")
 end
 
 def process_user_input
@@ -165,7 +167,7 @@ def run_program
 	end
 end
 
-
+run_program
 
 
 
