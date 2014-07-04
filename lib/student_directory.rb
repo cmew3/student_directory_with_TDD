@@ -167,11 +167,6 @@ def run_program
 	end
 end
 
-run_program
-
-
-
-
 
 
 
