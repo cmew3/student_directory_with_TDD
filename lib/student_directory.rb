@@ -54,8 +54,8 @@ end
 
 def input_students
 	selection =""
-	show('Would you like to add a new student ("Y") or finish ("N")')
 	until selection == "N"
+		show('Would you like to add a new student ("Y") or finish ("N")')
 		selection = take_user_input.upcase
  		process_add_new_student_choice(selection)
  	end
