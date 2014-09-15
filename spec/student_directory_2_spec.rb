@@ -207,11 +207,81 @@ describe 'Student directory' do
 		end
 	end
 
+
+context 'when saving students to a file it' do
+
+		it 'prepares students into CSV format' do
+			student = anna
+			expect(student_to_csv(student)).to eq ['anna', 'June']
+
+		end
+
+		it 'saves one student into a CSV file' do
+			students = [edward]
+			csv = double #this is a dummy file
+			expect(csv).to receive(:<<).with(["Edward","November"])
+			expect(CSV).to receive(:open).with('./student.csv','wb').and_yield(csv)
+			save_students_to_file(students)
+		end
+		
+		it 'saves many students list into a CSV file' do
+			students = [edward,anna]
+			csv = double #this is a dummy file	
+			expect(csv).to receive(:<<).with(["Edward","November"])
+			expect(csv).to receive(:<<).with(["anna","June"])
+			expect(CSV).to receive(:open).with('./student.csv','wb').and_yield(csv)
+			save_students_to_file(students)
+		end
+	end
+
+	context 'when loading students from a file' do
+
+		it 'adds the students from a csv file to student list' do
+			students=[anna]
+			csv = ['anna', 'June']
+			expect(self).to receive(:create_student).with("anna","June")
+			expect(CSV).to receive(:foreach).with("./student.csv").and_yield(csv)
+			load_students_from_csv
+			expect(students).to eq [{name: 'anna', cohort: :June}]
+		end
+
+	end
+
+	context 'when at the main menu' do
+
+		it 'welcomes the user and prints a menu' do
+			expect(self).to receive(:show).with(
+				"Please select an option:\n1. Input new students\n2. View students by cohort\n3. Save students to students.csv\n4. Load students from students.csv\n5. Exit\n")
+			print_menu_options
+		end
+
+		it 'prints the students when user selects 1' do
+			allow(self).to receive(:take_user_input).and_return("1")
+			expect(self).to receive(:input_students)
+			process_user_input
+		end
+
+		it 'does not prints the students when user selects 2' do
+			allow(self).to receive(:take_user_input).and_return("1")
+			expect(self).to receive(:input_students)
+			process_user_input
+		end
+
+		it 'exits the program when user selects 5' do
+			allow(self).to receive(:take_user_input).and_return("5")
+			expect(self).to receive(:exit)
+			process_user_input
+		end
+		
+		it 'prints a message if innput not valid' do
+			allow(self).to receive(:take_user_input).and_return("banana").exactly(1).times
+			expect(self).to receive(:show).with("Sorry that is not a valid option")
+			process_user_input
+		end
+
+	end 
+
  end
-
-
-
-
 
 
 
